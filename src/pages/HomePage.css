@@ -1,0 +1,45 @@
+.home-controls {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.home-search {
+  flex: 1;
+  min-width: 200px;
+  position: relative;
+}
+
+.home-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--font-size-md);
+  pointer-events: none;
+}
+
+.home-search-input {
+  padding-left: 42px !important;
+}
+
+.home-filters {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .home-controls {
+    flex-direction: column;
+  }
+
+  .home-filters {
+    width: 100%;
+  }
+
+  .home-filters .btn {
+    flex: 1;
+  }
+}

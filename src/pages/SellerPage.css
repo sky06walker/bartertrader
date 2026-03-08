@@ -1,0 +1,71 @@
+/* ============= Seller Page ============= */
+.seller-profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+.seller-profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--font-size-2xl);
+  color: white;
+  flex-shrink: 0;
+}
+
+.seller-profile-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.seller-profile-name {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.seller-profile-phone {
+  color: var(--color-accent);
+  font-size: var(--font-size-sm);
+  margin-top: 2px;
+}
+
+.seller-profile-meta {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  margin-top: 4px;
+}
+
+.seller-profile-actions {
+  display: flex;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .seller-profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: var(--space-lg);
+  }
+
+  .seller-profile-name {
+    justify-content: center;
+  }
+
+  .seller-profile-actions {
+    width: 100%;
+    justify-content: center;
+  }
+}

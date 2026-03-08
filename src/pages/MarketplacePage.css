@@ -1,0 +1,40 @@
+.marketplace-seller {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-top: var(--space-sm);
+}
+
+.marketplace-seller-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gradient-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.marketplace-seller-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.marketplace-seller-name {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.marketplace-seller-phone {
+  font-size: var(--font-size-xs);
+  color: var(--color-accent);
+}

@@ -1,0 +1,91 @@
+.image-uploader {
+  width: 100%;
+}
+
+.image-uploader-dropzone {
+  width: 100%;
+  min-height: 200px;
+  border: 2px dashed rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  background: var(--color-bg-input);
+}
+
+.image-uploader-dropzone:hover {
+  border-color: var(--color-accent);
+  background: rgba(6, 182, 212, 0.05);
+}
+
+.image-uploader-dropzone.dragging {
+  border-color: var(--color-accent);
+  background: rgba(6, 182, 212, 0.1);
+  transform: scale(1.01);
+}
+
+.image-uploader-dropzone-content {
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+.image-uploader-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.image-uploader-text {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+}
+
+.image-uploader-link {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.image-uploader-hint {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  margin-top: var(--space-xs);
+}
+
+.image-uploader-preview {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.image-uploader-preview img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+
+.image-uploader-remove {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.image-uploader-remove:hover {
+  background: var(--color-danger);
+  transform: scale(1.1);
+}

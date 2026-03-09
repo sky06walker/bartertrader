@@ -35,6 +35,10 @@ export default function ProfilePage() {
       setToast("Name is required.");
       return;
     }
+    if (!form.phone.trim()) {
+      setToast("Phone number is required.");
+      return;
+    }
 
     setSubmitting(true);
     setToast(null);
@@ -86,7 +90,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Phone Number</label>
+            <label className="form-label">Phone Number *</label>
             <input
               className="form-input"
               type="tel"
@@ -94,13 +98,19 @@ export default function ProfilePage() {
               placeholder="012-3456789"
               value={form.phone}
               onChange={handleChange}
+              required
             />
             <small className="profile-hint">
-              Providing a phone number makes it easier for other users to coordinate trades.
+              Required. Providing a phone number makes it easier for other users
+              to coordinate trades.
             </small>
           </div>
 
-          <button type="submit" className="btn btn-primary profile-submit" disabled={submitting}>
+          <button
+            type="submit"
+            className="btn btn-primary profile-submit"
+            disabled={submitting}
+          >
             {submitting ? "Saving..." : "Save Changes"}
           </button>
         </form>

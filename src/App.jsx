@@ -12,6 +12,7 @@ import CartPage from './pages/CartPage';
 import TradeConfirmationPage from './pages/TradeConfirmationPage';
 import SellerPage from './pages/SellerPage';
 import ProfilePage from './pages/ProfilePage';
+import RequirePhone from './components/RequirePhone';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import UserDataDeletionPage from './pages/UserDataDeletionPage';
 
@@ -38,16 +39,18 @@ function AppRoutes() {
         {/* Authenticated Routes */}
         {user ? (
           <>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/marketplace" element={<MarketplacePage />} />
-            <Route path="/add" element={<AddItemPage />} />
-            <Route path="/item/:id" element={<ItemDetailPage />} />
-            <Route path="/edit/:id" element={<EditItemPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/trade-summary" element={<TradeSummaryPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/trade/:tradeId" element={<TradeConfirmationPage />} />
-            <Route path="/seller/:userId" element={<SellerPage />} />
+            <Route element={<RequirePhone />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/marketplace" element={<MarketplacePage />} />
+              <Route path="/add" element={<AddItemPage />} />
+              <Route path="/item/:id" element={<ItemDetailPage />} />
+              <Route path="/edit/:id" element={<EditItemPage />} />
+              <Route path="/trade-summary" element={<TradeSummaryPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/trade/:tradeId" element={<TradeConfirmationPage />} />
+              <Route path="/seller/:userId" element={<SellerPage />} />
+            </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (

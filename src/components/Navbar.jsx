@@ -87,6 +87,9 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="navbar-dropdown-divider" />
+                <Link to="/profile" className="navbar-dropdown-item" onClick={() => setDropdownOpen(false)}>
+                  👤 My Profile
+                </Link>
                 <Link to={`/seller/${userProfile.id}`} className="navbar-dropdown-item" onClick={() => setDropdownOpen(false)}>
                   🏪 My Shop
                 </Link>
@@ -137,6 +140,9 @@ export default function Navbar() {
                   <span className="navbar-dropdown-phone">{userProfile.phone}</span>
                 </div>
               </div>
+              <Link to="/profile" className="navbar-link">
+                👤 My Profile
+              </Link>
               <Link to={`/seller/${userProfile.id}`} className="navbar-link">
                 🏪 My Shop
               </Link>

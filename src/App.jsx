@@ -11,6 +11,7 @@ import TradeSummaryPage from './pages/TradeSummaryPage';
 import CartPage from './pages/CartPage';
 import TradeConfirmationPage from './pages/TradeConfirmationPage';
 import SellerPage from './pages/SellerPage';
+import ProfilePage from './pages/ProfilePage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import UserDataDeletionPage from './pages/UserDataDeletionPage';
 
@@ -42,6 +43,7 @@ function AppRoutes() {
             <Route path="/add" element={<AddItemPage />} />
             <Route path="/item/:id" element={<ItemDetailPage />} />
             <Route path="/edit/:id" element={<EditItemPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/trade-summary" element={<TradeSummaryPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/trade/:tradeId" element={<TradeConfirmationPage />} />

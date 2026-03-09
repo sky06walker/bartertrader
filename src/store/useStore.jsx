@@ -104,6 +104,20 @@ export function StoreProvider({ children }) {
     setUserProfile({ id: uid, ...profile });
   }, []);
 
+  const updateUserProfile = useCallback(async (uid, profileUpdates) => {
+    if (!uid) return;
+    try {
+      await updateDoc(doc(db, 'users', uid), {
+        ...profileUpdates,
+        updatedAt: serverTimestamp(),
+      });
+      setUserProfile((prev) => ({ ...prev, ...profileUpdates }));
+    } catch (error) {
+      console.error("Failed to update profile", error);
+      throw error;
+    }
+  }, []);
+
   const addItem = useCallback(async (itemData) => {
     if (!user || !userProfile) return;
     const docRef = await addDoc(collection(db, 'items'), {
@@ -217,7 +231,7 @@ export function StoreProvider({ children }) {
 
   const value = {
     user, userProfile, myItems, allItems, cart, loading,
-    saveUserProfile, addItem, updateItem,
+    saveUserProfile, updateUserProfile, addItem, updateItem,
     markTraded, markAvailable, bulkMarkTraded, deleteItem,
     addToCart, removeFromCart, clearCart, isInCart, confirmTrade,
   };

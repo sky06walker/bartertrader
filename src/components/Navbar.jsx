@@ -77,8 +77,12 @@ export default function Navbar() {
             {dropdownOpen && (
               <div className="navbar-dropdown">
                 <div className="navbar-dropdown-header">
-                  <span className="navbar-dropdown-avatar">
-                    {userProfile.name?.charAt(0).toUpperCase()}
+                  <span className="navbar-dropdown-avatar" style={{ overflow: 'hidden', padding: 0 }}>
+                    {userProfile.photoURL ? (
+                      <img src={userProfile.photoURL} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      userProfile.name?.charAt(0).toUpperCase()
+                    )}
                   </span>
                   <div className="navbar-dropdown-info">
                     <span className="navbar-dropdown-name">{userProfile.name}</span>
@@ -87,6 +91,9 @@ export default function Navbar() {
                   </div>
                 </div>
                 <div className="navbar-dropdown-divider" />
+                <Link to="/trade-history" className="navbar-dropdown-item" onClick={() => setDropdownOpen(false)}>
+                  📜 My Exchanges
+                </Link>
                 <Link to="/profile" className="navbar-dropdown-item" onClick={() => setDropdownOpen(false)}>
                   👤 My Profile
                 </Link>
@@ -132,14 +139,21 @@ export default function Navbar() {
             <>
               <div className="navbar-dropdown-divider" />
               <div className="navbar-mobile-user">
-                <span className="navbar-dropdown-avatar">
-                  {userProfile.name?.charAt(0).toUpperCase()}
+                <span className="navbar-dropdown-avatar" style={{ overflow: 'hidden', padding: 0 }}>
+                  {userProfile.photoURL ? (
+                    <img src={userProfile.photoURL} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    userProfile.name?.charAt(0).toUpperCase()
+                  )}
                 </span>
                 <div>
                   <span className="navbar-dropdown-name">{userProfile.name}</span>
                   <span className="navbar-dropdown-phone">{userProfile.phone}</span>
                 </div>
               </div>
+              <Link to="/trade-history" className="navbar-link">
+                📜 My Exchanges
+              </Link>
               <Link to="/profile" className="navbar-link">
                 👤 My Profile
               </Link>

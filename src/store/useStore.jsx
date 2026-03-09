@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, deleteUser } from 'firebase/auth';
 import {
   collection,
   query,
@@ -26,6 +26,7 @@ export function StoreProvider({ children }) {
   const [myItems, setMyItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
   const [cart, setCart] = useState([]);
+  const [tradeHistory, setTradeHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Listen to auth state
@@ -95,6 +96,25 @@ export function StoreProvider({ children }) {
     return unsub;
   }, []);
 
+  // Listen to current user's trade history
+  useEffect(() => {
+    if (!user) return;
+    const q = query(
+      collection(db, 'trades'),
+      where('participants', 'array-contains', user.uid)
+    );
+    const unsub = onSnapshot(q, (snapshot) => {
+      const trades = snapshot.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+        confirmedAt: d.data().confirmedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+      }));
+      trades.sort((a, b) => new Date(b.confirmedAt) - new Date(a.confirmedAt));
+      setTradeHistory(trades);
+    });
+    return unsub;
+  }, [user]);
+
   const saveUserProfile = useCallback(async (uid, profile) => {
     await setDoc(doc(db, 'users', uid), {
       ...profile,
@@ -156,6 +176,19 @@ export function StoreProvider({ children }) {
     await deleteDoc(doc(db, 'items', itemId));
   }, []);
 
+  const deleteAccount = useCallback(async () => {
+    if (!user) return;
+    try {
+      // 1. Delete associated profile document from Firestore
+      await deleteDoc(doc(db, 'users', user.uid));
+      // 2. Delete the actual Authentication user
+      await deleteUser(user);
+    } catch (error) {
+      console.error("Failed to perform account deletion", error);
+      throw error;
+    }
+  }, [user]);
+
   // Cart operations
   const addToCart = useCallback(async (itemId) => {
     if (!user) return;
@@ -185,10 +218,13 @@ export function StoreProvider({ children }) {
 
     // Create trade document
     const tradeRef = doc(collection(db, 'trades'));
+    const uniqueParticipants = Array.from(new Set([user.uid, ...cartItems.map((i) => i.userId)]));
+    
     const tradeData = {
       buyerId: user.uid,
       buyerName: userProfile.name,
       buyerPhone: userProfile.phone,
+      participants: uniqueParticipants,
       status: 'confirmed',
       confirmedAt: serverTimestamp(),
       items: cartItems.map((item) => ({
@@ -230,9 +266,9 @@ export function StoreProvider({ children }) {
   }, [user, userProfile]);
 
   const value = {
-    user, userProfile, myItems, allItems, cart, loading,
+    user, userProfile, myItems, allItems, cart, tradeHistory, loading,
     saveUserProfile, updateUserProfile, addItem, updateItem,
-    markTraded, markAvailable, bulkMarkTraded, deleteItem,
+    markTraded, markAvailable, bulkMarkTraded, deleteItem, deleteAccount,
     addToCart, removeFromCart, clearCart, isInCart, confirmTrade,
   };
 

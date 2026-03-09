@@ -10,6 +10,7 @@ import EditItemPage from './pages/EditItemPage';
 import TradeSummaryPage from './pages/TradeSummaryPage';
 import CartPage from './pages/CartPage';
 import TradeConfirmationPage from './pages/TradeConfirmationPage';
+import TradeHistoryPage from './pages/TradeHistoryPage';
 import SellerPage from './pages/SellerPage';
 import ProfilePage from './pages/ProfilePage';
 import RequirePhone from './components/RequirePhone';
@@ -47,6 +48,7 @@ function AppRoutes() {
               <Route path="/item/:id" element={<ItemDetailPage />} />
               <Route path="/edit/:id" element={<EditItemPage />} />
               <Route path="/trade-summary" element={<TradeSummaryPage />} />
+              <Route path="/trade-history" element={<TradeHistoryPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/trade/:tradeId" element={<TradeConfirmationPage />} />
               <Route path="/seller/:userId" element={<SellerPage />} />

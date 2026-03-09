@@ -44,6 +44,7 @@ export default function RegisterPage() {
       } else if (err.code === "auth/cancelled-popup-request") {
         // Duplicate popup — ignore
       } else {
+        console.error("Firebase Social Login Error:", err);
         setToast("Social login failed. Please try again.");
       }
     } finally {

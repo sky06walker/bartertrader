@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import './TradeConfirmationPage.css';
-import logoImg from '../assets/logo.png';
+import logoImg from '../assets/logo_transparent.png';
 
 export default function TradeConfirmationPage() {
   const { tradeId } = useParams();

@@ -4,7 +4,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useStore } from '../store/useStore';
 import './Navbar.css';
-import logoImg from '../assets/logo.png';
+import logoImg from '../assets/logo_transparent.png';
 
 export default function Navbar() {
   const { userProfile, cart } = useStore();

@@ -1,8 +1,8 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { signInWithPopup } from 'firebase/auth';
 import RegisterPage from '../RegisterPage';
-import { googleProvider, facebookProvider } from '../../firebase';
+import { googleProvider } from '../../firebase';
 
 // Mock the Firebase auth module
 vi.mock('firebase/auth', async (importOriginal) => {
@@ -45,7 +45,7 @@ describe('RegisterPage Social Login', () => {
     
     // Check for buttons
     expect(screen.getByRole('button', { name: /Google/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Facebook/i })).toBeInTheDocument();
+    // expect(screen.getByRole('button', { name: /Facebook/i })).toBeInTheDocument();
   });
 
   it('renders Google and Facebook buttons on Sign In tab', () => {
@@ -56,7 +56,7 @@ describe('RegisterPage Social Login', () => {
     
     // Social buttons should still be visible
     expect(screen.getByRole('button', { name: /Google/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Facebook/i })).toBeInTheDocument();
+    // expect(screen.getByRole('button', { name: /Facebook/i })).toBeInTheDocument();
   });
 
   it('hides social buttons on Forgot Password view', () => {
@@ -69,7 +69,7 @@ describe('RegisterPage Social Login', () => {
     // Social buttons should NOT be visible
     expect(screen.queryByText('or continue with')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Google/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Facebook/i })).not.toBeInTheDocument();
+    // expect(screen.queryByRole('button', { name: /Facebook/i })).not.toBeInTheDocument();
   });
 
   it('calls signInWithPopup with Google provider when Google button is clicked', async () => {
@@ -85,6 +85,7 @@ describe('RegisterPage Social Login', () => {
     expect(signInWithPopup).toHaveBeenCalledWith(expect.anything(), googleProvider);
   });
 
+  /*
   it('calls signInWithPopup with Facebook provider when Facebook button is clicked', async () => {
     // Setup mock resolution
     signInWithPopup.mockResolvedValueOnce({ user: { uid: '123' } });
@@ -97,4 +98,5 @@ describe('RegisterPage Social Login', () => {
     expect(signInWithPopup).toHaveBeenCalledTimes(1);
     expect(signInWithPopup).toHaveBeenCalledWith(expect.anything(), facebookProvider);
   });
+  */
 });

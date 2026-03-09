@@ -6,7 +6,7 @@ import {
   sendPasswordResetEmail,
   signInWithPopup,
 } from "firebase/auth";
-import { auth, googleProvider, facebookProvider } from "../firebase";
+import { auth, googleProvider } from "../firebase";
 import { useStore } from "../store/useStore";
 import Toast from "../components/Toast";
 import "./RegisterPage.css";
@@ -390,6 +390,7 @@ export default function RegisterPage() {
                         </svg>
                         Google
                       </button>
+                      {/* 
                       <button
                         type="button"
                         className="social-btn social-btn-facebook"
@@ -407,6 +408,7 @@ export default function RegisterPage() {
                         </svg>
                         Facebook
                       </button>
+                      */}
                     </div>
                   </div>
                 )}

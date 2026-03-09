@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import './ItemCard.css';
 
-export default function ItemCard({ item, isOwner }) {
+export default function ItemCard({ item, isOwner, hideSellerInfo = false }) {
   const { markTraded, markAvailable, addToCart, removeFromCart, isInCart } = useStore();
   const inCart = !isOwner && isInCart(item.id);
 
@@ -54,7 +54,7 @@ export default function ItemCard({ item, isOwner }) {
         )}
 
         {/* Seller info for marketplace */}
-        {!isOwner && item.userName && (
+        {!isOwner && !hideSellerInfo && item.userName && (
           <Link to={`/seller/${item.userId}`} className="item-card-seller" style={{ textDecoration: 'none' }}>
             <span className="item-card-seller-avatar">
               {item.userName.charAt(0).toUpperCase()}

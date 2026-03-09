@@ -116,7 +116,7 @@ export default function SellerPage() {
         {items.length > 0 ? (
           <div className="items-grid">
             {items.map((item) => (
-              <ItemCard key={item.id} item={item} isOwner={isOwner} />
+              <ItemCard key={item.id} item={item} isOwner={isOwner} hideSellerInfo={true} />
             ))}
           </div>
         ) : (

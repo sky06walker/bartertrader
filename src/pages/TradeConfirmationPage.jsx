@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useStore } from '../store/useStore';
 import './TradeConfirmationPage.css';
 import logoImg from '../assets/logo_transparent.png';
 
 export default function TradeConfirmationPage() {
   const { tradeId } = useParams();
+  const { user } = useStore();
   const [trade, setTrade] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -51,6 +53,28 @@ export default function TradeConfirmationPage() {
     return acc;
   }, {});
   const sellers = Object.values(grouped);
+
+  // Preparation Summary Logic
+  const isBuyer = user?.uid === trade.buyerId;
+  const itemsToPrepare = {}; // Map of "itemName" -> qty
+
+  if (isBuyer) {
+    // Buyer needs to prepare what they promised to give all sellers in exchange
+    trade.items.forEach(item => {
+      (item.tradeRequests || []).forEach(tr => {
+        itemsToPrepare[tr.item] = (itemsToPrepare[tr.item] || 0) + (tr.qty || 1);
+      });
+    });
+  } else {
+    // Seller only needs to prepare the items they listed that the buyer wants
+    trade.items.forEach(item => {
+      if (item.sellerId === user?.uid) {
+        itemsToPrepare[item.itemName] = (itemsToPrepare[item.itemName] || 0) + (item.qty || 1);
+      }
+    });
+  }
+
+  const prepEntries = Object.entries(itemsToPrepare);
 
   return (
     <div className="page">
@@ -138,6 +162,25 @@ export default function TradeConfirmationPage() {
           <div className="trade-print-total">
             <strong>Total Items:</strong> {trade.items.reduce((sum, i) => sum + (i.qty || 1), 0)} items
             from {sellers.length} seller{sellers.length !== 1 ? 's' : ''}
+          </div>
+
+          <div className="trade-print-prep" style={{ marginTop: 'var(--space-xl)', border: '2px dashed var(--color-border)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', background: 'var(--color-bg-subtle)' }}>
+            <h3 style={{ marginBottom: 'var(--space-sm)' }}>📦 Items You Need to Prepare</h3>
+            {prepEntries.length === 0 ? (
+              <p style={{ color: 'var(--color-text-secondary)', fontStyle: 'italic' }}>No physical items needed for preparation.</p>
+            ) : (
+              <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
+                {prepEntries.map(([itemName, qty], idx) => (
+                  <li key={idx} style={{ padding: '4px 0', borderBottom: idx !== prepEntries.length - 1 ? '1px solid var(--color-border)' : 'none', display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontWeight: '500' }}>{itemName}</span>
+                    <span style={{ fontWeight: 'bold' }}>x{qty}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p style={{ marginTop: 'var(--space-sm)', fontSize: '12px', color: 'var(--color-text-muted)' }}>
+              * Make sure `{user?.uid === trade.buyerId ? 'you have these items ready to give the seller(s)' : 'these items are ready to give the buyer'}` when meeting up.
+            </p>
           </div>
         </div>
       </div>

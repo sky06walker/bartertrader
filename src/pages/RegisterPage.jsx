@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -13,6 +13,7 @@ import "./RegisterPage.css";
 import logoImg from "../assets/logo_transparent.png";
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
   const { saveUserProfile } = useStore();
   const [mode, setMode] = useState("signup"); // 'signup' | 'signin' | 'forgot'
   const [form, setForm] = useState({
@@ -34,6 +35,7 @@ export default function RegisterPage() {
     try {
       await signInWithPopup(auth, provider);
       // Profile auto-created in useStore's onAuthStateChanged
+      navigate('/marketplace');
     } catch (err) {
       if (err.code === "auth/popup-closed-by-user") {
         // User closed popup — no error needed
@@ -113,11 +115,12 @@ export default function RegisterPage() {
           phone: form.phone.trim(),
           email: form.email.trim(),
         });
-      } else {
-        await signInWithEmailAndPassword(auth, form.email, form.password);
-      }
-    } catch (err) {
-      let msg = "Something went wrong";
+        } else {
+          await signInWithEmailAndPassword(auth, form.email, form.password);
+        }
+        navigate('/marketplace');
+      } catch (err) {
+        let msg = "Something went wrong";
       if (err.code === "auth/email-already-in-use")
         msg = "Email already registered. Try signing in.";
       else if (err.code === "auth/invalid-email") msg = "Invalid email address";

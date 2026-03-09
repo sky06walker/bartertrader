@@ -46,12 +46,17 @@ export default function AddItemPage() {
     }
     setSubmitting(true);
     try {
+      const finalTradeRequests = [...tradeRequests];
+      if (tradeInput.item.trim()) {
+        finalTradeRequests.push({ item: tradeInput.item.trim(), qty: tradeInput.qty });
+      }
+
       const itemId = await addItem({
         name: form.name.trim(),
         description: form.description.trim(),
         exchangeLocation: form.exchangeLocation.trim(),
         availableQty: form.availableQty,
-        tradeRequests,
+        tradeRequests: finalTradeRequests,
         imageUrl: null,
       });
 

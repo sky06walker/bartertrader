@@ -70,12 +70,17 @@ export default function EditItemPage() {
     }
     setSubmitting(true);
     try {
+      const finalTradeRequests = [...tradeRequests];
+      if (tradeInput.item.trim()) {
+        finalTradeRequests.push({ item: tradeInput.item.trim(), qty: tradeInput.qty });
+      }
+
       const updateData = {
         name: form.name.trim(),
         description: form.description.trim(),
         exchangeLocation: form.exchangeLocation.trim(),
         availableQty: form.availableQty,
-        tradeRequests,
+        tradeRequests: finalTradeRequests,
       };
 
       if (imageFile) {

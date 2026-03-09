@@ -215,7 +215,38 @@ export default function CartPage() {
                                 onClick={() => updateQty(item.id, (cartQtys[item.id] || 1) - 1)}
                                 disabled={(cartQtys[item.id] || 1) <= 1}
                               >−</button>
-                              <span className="cart-qty-value">{cartQtys[item.id] || 1}</span>
+                              <input
+                                type="number"
+                                className="cart-qty-input"
+                                min="1"
+                                max={item.availableQty}
+                                value={cartQtys[item.id] === '' ? '' : (cartQtys[item.id] || 1)}
+                                onChange={(e) => {
+                                  let val = parseInt(e.target.value);
+                                  if (isNaN(val)) {
+                                    setCartQtys((prev) => ({ ...prev, [item.id]: '' }));
+                                  } else {
+                                    setCartQtys((prev) => ({ ...prev, [item.id]: val }));
+                                  }
+                                }}
+                                onBlur={(e) => {
+                                  let val = parseInt(e.target.value);
+                                  if (isNaN(val) || val < 1) val = 1;
+                                  if (val > item.availableQty) val = item.availableQty;
+                                  updateQty(item.id, val);
+                                }}
+                                style={{
+                                  width: '50px',
+                                  textAlign: 'center',
+                                  background: 'rgba(0,0,0,0.2)',
+                                  border: '1px solid rgba(255,255,255,0.1)',
+                                  borderRadius: '4px',
+                                  color: 'var(--color-text)',
+                                  fontSize: 'var(--font-size-sm)',
+                                  padding: '4px',
+                                  MozAppearance: 'textfield'
+                                }}
+                              />
                               <button
                                 className="cart-qty-btn"
                                 onClick={() => updateQty(item.id, (cartQtys[item.id] || 1) + 1)}

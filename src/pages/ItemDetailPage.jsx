@@ -8,7 +8,7 @@ import Toast from '../components/Toast';
 export default function ItemDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, markTraded, markAvailable, deleteItem } = useStore();
+  const { user, markTraded, markAvailable, deleteItem, addToCart, removeFromCart, isInCart } = useStore();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
@@ -167,6 +167,21 @@ export default function ItemDetailPage() {
                     </button>
                   </div>
                 )}
+              </div>
+            )}
+            
+            {!isOwner && item.status === 'available' && (
+              <div className="detail-actions" style={{ flexDirection: 'column' }}>
+                <button
+                  className={`btn ${isInCart(item.id) ? 'btn-secondary' : 'btn-primary'}`}
+                  onClick={() => isInCart(item.id) ? removeFromCart(item.id) : addToCart(item.id)}
+                  style={{ width: '100%', marginBottom: 'var(--space-sm)' }}
+                >
+                  {isInCart(item.id) ? '✓ In Cart' : '🛒 Add to Cart'}
+                </button>
+                <Link to="/cart" className="btn btn-secondary" style={{ width: '100%' }}>
+                  Go to Cart
+                </Link>
               </div>
             )}
           </div>

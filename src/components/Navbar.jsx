@@ -7,7 +7,7 @@ import './Navbar.css';
 import logoImg from '../assets/logo_transparent.png';
 
 export default function Navbar() {
-  const { userProfile, cart } = useStore();
+  const { userProfile, cart, unreadTradesCount = 0 } = useStore();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
@@ -70,6 +70,7 @@ export default function Navbar() {
             >
               <span className="navbar-avatar">
                 {userProfile.name?.charAt(0).toUpperCase()}
+                {unreadTradesCount > 0 && <span className="notification-dot"></span>}
               </span>
               <span className="navbar-avatar-caret">{dropdownOpen ? '▲' : '▼'}</span>
             </button>
@@ -92,7 +93,8 @@ export default function Navbar() {
                 </div>
                 <div className="navbar-dropdown-divider" />
                 <Link to="/trade-history" className="navbar-dropdown-item" onClick={() => setDropdownOpen(false)}>
-                  📜 My Exchanges
+                  📜 My Exchanges 
+                  {unreadTradesCount > 0 && <span className="badge badge-danger" style={{ marginLeft: 'auto', fontSize: '10px' }}>{unreadTradesCount} NEW</span>}
                 </Link>
                 <Link to="/profile" className="navbar-dropdown-item" onClick={() => setDropdownOpen(false)}>
                   👤 My Profile
@@ -113,10 +115,12 @@ export default function Navbar() {
           className="navbar-mobile-toggle"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
+          style={{ position: 'relative' }}
         >
           <span className={`hamburger ${mobileOpen ? 'open' : ''}`}>
             <span></span><span></span><span></span>
           </span>
+          {unreadTradesCount > 0 && <span className="notification-dot" style={{ position: 'absolute', top: '0', right: '0' }}></span>}
         </button>
       </div>
 
@@ -151,8 +155,9 @@ export default function Navbar() {
                   <span className="navbar-dropdown-phone">{userProfile.phone}</span>
                 </div>
               </div>
-              <Link to="/trade-history" className="navbar-link">
+              <Link to="/trade-history" className="navbar-link" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 📜 My Exchanges
+                {unreadTradesCount > 0 && <span className="badge badge-danger" style={{ fontSize: '10px' }}>{unreadTradesCount} NEW</span>}
               </Link>
               <Link to="/profile" className="navbar-link">
                 👤 My Profile

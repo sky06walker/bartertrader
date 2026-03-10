@@ -27,6 +27,7 @@ export function StoreProvider({ children }) {
   const [allItems, setAllItems] = useState([]);
   const [cart, setCart] = useState([]);
   const [tradeHistory, setTradeHistory] = useState([]);
+  const [unreadTradesCount, setUnreadTradesCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   // Listen to auth state
@@ -111,6 +112,10 @@ export function StoreProvider({ children }) {
       }));
       trades.sort((a, b) => new Date(b.confirmedAt) - new Date(a.confirmedAt));
       setTradeHistory(trades);
+      
+      // Calculate unread trades for notifications
+      const unreadCount = trades.filter(t => t.readBy && !t.readBy.includes(user.uid)).length;
+      setUnreadTradesCount(unreadCount);
     });
     return unsub;
   }, [user]);
@@ -176,6 +181,17 @@ export function StoreProvider({ children }) {
     await deleteDoc(doc(db, 'items', itemId));
   }, []);
 
+  const markTradeRead = useCallback(async (tradeId) => {
+    if (!user) return;
+    try {
+      await updateDoc(doc(db, 'trades', tradeId), {
+        readBy: arrayUnion(user.uid)
+      });
+    } catch (err) {
+      console.error('Failed to mark trade as read', err);
+    }
+  }, [user]);
+
   const deleteAccount = useCallback(async () => {
     if (!user) return;
     try {
@@ -225,6 +241,7 @@ export function StoreProvider({ children }) {
       buyerName: userProfile.name,
       buyerPhone: userProfile.phone,
       participants: uniqueParticipants,
+      readBy: [user.uid], // The buyer has inherently "read" the trade they originated
       status: 'confirmed',
       confirmedAt: serverTimestamp(),
       items: cartItems.map((item) => ({
@@ -266,9 +283,9 @@ export function StoreProvider({ children }) {
   }, [user, userProfile]);
 
   const value = {
-    user, userProfile, myItems, allItems, cart, tradeHistory, loading,
+    user, userProfile, myItems, allItems, cart, tradeHistory, unreadTradesCount, loading,
     saveUserProfile, updateUserProfile, addItem, updateItem,
-    markTraded, markAvailable, bulkMarkTraded, deleteItem, deleteAccount,
+    markTraded, markAvailable, bulkMarkTraded, deleteItem, deleteAccount, markTradeRead,
     addToCart, removeFromCart, clearCart, isInCart, confirmTrade,
   };
 

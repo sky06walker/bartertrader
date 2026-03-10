@@ -28,15 +28,20 @@ export default function TradeHistoryPage() {
           <div className="trade-history-list" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
             {tradeHistory.map((trade) => {
               const isBuyer = trade.buyerId === user?.uid;
+              const isRead = trade.readBy?.includes(user?.uid) ?? true;
               const roleLabel = isBuyer ? "Buyer" : "Seller";
               const totalItems = trade.items.reduce((sum, item) => sum + (item.qty || 1), 0);
 
               return (
-                <div key={trade.id} className="glass-card" style={{ padding: 'var(--space-md)', cursor: 'default' }}>
+                <div key={trade.id} className={`glass-card ${!isRead ? 'unread-trade' : ''}`} style={{ padding: 'var(--space-md)', cursor: 'default', position: 'relative' }}>
+                  {!isRead && (
+                    <div style={{ position: 'absolute', top: 0, left: 0, width: '4px', height: '100%', background: 'var(--color-danger)', borderTopLeftRadius: 'var(--radius-lg)', borderBottomLeftRadius: 'var(--radius-lg)' }} />
+                  )}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 'var(--space-sm)', marginBottom: 'var(--space-sm)' }}>
                     <div>
-                      <h3 style={{ fontSize: 'var(--font-size-lg)', marginBottom: '4px' }}>
+                      <h3 style={{ fontSize: 'var(--font-size-lg)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                         Trade #{trade.id.slice(0, 8).toUpperCase()}
+                        {!isRead && <span className="badge badge-danger" style={{ fontSize: '10px' }}>NEW ORDER</span>}
                       </h3>
                       <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)' }}>
                         {new Date(trade.confirmedAt).toLocaleDateString('en-MY', {

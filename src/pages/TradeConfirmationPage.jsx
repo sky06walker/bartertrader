@@ -8,7 +8,7 @@ import logoImg from '../assets/logo_transparent.png';
 
 export default function TradeConfirmationPage() {
   const { tradeId } = useParams();
-  const { user } = useStore();
+  const { user, markTradeRead } = useStore();
   const [trade, setTrade] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -17,6 +17,13 @@ export default function TradeConfirmationPage() {
       const snap = await getDoc(doc(db, 'trades', tradeId));
       if (snap.exists()) {
         const data = snap.data();
+        // If this user is a participant and hasn't read the trade yet, mark it read
+        if (data.participants?.includes(user?.uid)) {
+          const readBy = data.readBy || [];
+          if (!readBy.includes(user?.uid)) {
+            markTradeRead(snap.id);
+          }
+        }
         setTrade({
           id: snap.id,
           ...data,
@@ -26,7 +33,7 @@ export default function TradeConfirmationPage() {
       setLoading(false);
     }
     load();
-  }, [tradeId]);
+  }, [tradeId, user?.uid, markTradeRead]); // Added user?.uid and markTradeRead to dependency array
 
   if (loading) {
     return <div className="page"><div className="container"><p>Loading trade...</p></div></div>;
